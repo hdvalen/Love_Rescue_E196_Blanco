@@ -2,6 +2,5 @@
 
 # Integrantes
 * Magdali Liseth Leon Mantilla
-* Cristian Cartagena Oviedo
 * John Dario Prada Santamaria
 * Hodeth Valentina Caballero Gutierrez 
