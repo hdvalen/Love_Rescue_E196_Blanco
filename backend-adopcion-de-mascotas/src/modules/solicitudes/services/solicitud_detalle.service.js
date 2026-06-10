@@ -323,8 +323,8 @@ const acceptContract = async (idSolicitud, ip, usuarioId) => {
     const solicitud = await Solicitud.findByPk(idSolicitud, {
       include: [
         { model: require('../../users/models/user.model'), attributes: ['nombre', 'email'] },
-        { model: Mascota, attributes: ['nombre', 'especie', 'raza', 'id_mascota'] },
-        { model: Fundacion, attributes: ['nombre_fundacion', 'logo_url', 'id_usuario'] }
+        { model: Mascota, attributes: ['nombre', 'especie', 'raza', 'sexo', 'edad', 'esterilizado', 'vacunado', 'id_mascota'] },
+        { model: Fundacion, attributes: ['nombre_fundacion', 'nit', 'direccion', 'logo_url', 'id_usuario'] }
       ],
       transaction
     });
@@ -411,9 +411,9 @@ const acceptContract = async (idSolicitud, ip, usuarioId) => {
       const day = now.getDate();
       const month = months[now.getMonth()];
       const year = now.getFullYear();
-      const fundacionEmail = 'contacto@ejemplo.com';
-      const fundacionNIT = '000.000.000-0';
-      const fundacionDireccion = 'Carrera 1 # 1-01, Bogotá D.C.';
+      const fundacionEmail = 'contacto@fundacion.com';
+      const fundacionNIT = solicitud.Fundacion?.nit || '000.000.000-0';
+      const fundacionDireccion = solicitud.Fundacion?.direccion || 'Carrera 1 # 1-01, Bogotá D.C.';
       doc.fontSize(SZ).font(FONT).fillColor(MID).text(
         `En la ciudad de Bogotá D.C., República de Colombia, a los ${day} (${day}) días del mes de ${month} del año ${year}, comparecen: de una parte, ${solicitud.User?.nombre || '---'}, identificado como persona natural, quien en adelante se denominará EL/LA ADOPTANTE; y de otra parte, ${solicitud.Fundacion?.nombre_fundacion || '---'}, entidad sin ánimo de lucro dedicada a la protección animal, con NIT ${fundacionNIT}, con domicilio en la ${fundacionDireccion} y correo electrónico ${fundacionEmail}, quien en adelante se denominará LA FUNDACIÓN. Ambas partes, con plena capacidad legal para obligarse, celebran y suscriben el presente CONTRATO DE ADOPCIÓN RESPONSABLE, el cual se regirá por las cláusulas aquí dispuestas y por las normas legales colombianas vigentes aplicables.`,
         { align: 'justify', lineGap: LG }
