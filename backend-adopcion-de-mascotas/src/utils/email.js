@@ -7,7 +7,17 @@ let transporter = null;
 function getTransporter() {
     if (transporter) return transporter;
 
-    if (!process.env.SMTP_HOST) return null;
+    if (!process.env.SMTP_HOST) {
+        logger.warn('[email] SMTP_HOST no configurado');
+        return null;
+    }
+
+    logger.info('[email] Creando transporter', {
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT,
+        user: process.env.SMTP_USER,
+        secure: process.env.SMTP_SECURE
+    });
 
     transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
@@ -23,6 +33,12 @@ function getTransporter() {
         connectionTimeout: 10000,
         greetingTimeout: 10000,
         socketTimeout: 10000
+    });
+
+    transporter.verify().then(() => {
+        logger.info('[email] Transporter verificado correctamente');
+    }).catch(err => {
+        logger.error('[email] Error verificando transporter', { error: err.message, code: err.code });
     });
 
     return transporter;
@@ -57,13 +73,17 @@ const sendVerificationResult = async (fundacion, updates) => {
 };
 
 const sendEmailVerification = async (user, token) => {
+    logger.info('[email] Enviando verificación', { email: user.email, nombre: user.nombre });
     const t = getTransporter();
-    if (!t) return;
+    if (!t) {
+        logger.warn('[email] Transporter no disponible, email no enviado');
+        return;
+    }
 
     const verifyUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/verify-email?token=${token}`;
 
     try {
-        await t.sendMail({
+        const info = await t.sendMail({
             from: process.env.SMTP_FROM || 'noreply@adopcionmascotas.com',
             to: user.email,
             subject: '🐾 Verifica tu correo electrónico - AdoptaMe',
@@ -81,8 +101,14 @@ const sendEmailVerification = async (user, token) => {
 <p>Este enlace expirará en 24 horas.</p>
 <p>Si no creaste una cuenta en AdoptaMe, ignora este mensaje.</p>`
         });
+        logger.info('[email] Verificación enviada exitosamente', { email: user.email, messageId: info.messageId });
     } catch (error) {
-        logger.error('[email] sendEmailVerification falló', { error: error.message, email: user.email });
+        logger.error('[email] sendEmailVerification falló', {
+            error: error.message,
+            code: error.code,
+            command: error.command,
+            email: user.email
+        });
     }
 };
 
