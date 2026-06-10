@@ -162,6 +162,9 @@ async function testSmtpConnection() {
     const t = getTransporter();
     if (!t) return { ok: false, error: 'SMTP_HOST no configurado' };
     try {
+        if (t.send) {
+            return { ok: true, message: 'Usando SendGrid API (HTTPS)' };
+        }
         await t.verify();
         return { ok: true, message: 'Conexión SMTP exitosa' };
     } catch (error) {
