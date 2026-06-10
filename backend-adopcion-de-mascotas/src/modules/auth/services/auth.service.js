@@ -56,12 +56,10 @@ const register = async (data) => {
         response.id_fundacion = fundacion.id_fundacion;
     }
 
-    try {
-        const emailUtil = require('../../../utils/email');
-        await emailUtil.sendEmailVerification(user, verificationToken);
-    } catch (error) {
+    const emailUtil = require('../../../utils/email');
+    emailUtil.sendEmailVerification(user, verificationToken).catch(error => {
         logger.warn('[email] sendVerification falló', { error: error.message, userId: user.id_usuario });
-    }
+    });
 
     return response;
 
@@ -187,12 +185,10 @@ const resendVerification = async (email) => {
         email_verification_expires: verificationExpires
     });
 
-    try {
-        const emailUtil = require('../../../utils/email');
-        await emailUtil.sendEmailVerification(user, verificationToken);
-    } catch (error) {
+    const emailUtil = require('../../../utils/email');
+    emailUtil.sendEmailVerification(user, verificationToken).catch(error => {
         logger.warn('[email] resendVerification falló', { error: error.message, userId: user.id_usuario });
-    }
+    });
 
     return { message: 'Correo de verificación reenviado' };
 };
@@ -276,12 +272,10 @@ const forgotPassword = async (email) => {
         password_reset_expires: resetExpires
     });
 
-    try {
-        const emailUtil = require('../../../utils/email');
-        await emailUtil.sendPasswordReset(user, resetToken);
-    } catch (error) {
+    const emailUtil = require('../../../utils/email');
+    emailUtil.sendPasswordReset(user, resetToken).catch(error => {
         logger.warn('[email] sendPasswordReset falló', { error: error.message, userId: user.id_usuario });
-    }
+    });
 
     return { message: 'Si el correo existe, recibirás un enlace para restablecer tu contraseña' };
 };
