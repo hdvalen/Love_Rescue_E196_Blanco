@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://cozy-happiness-production-77bb.up.railway.app/api';
 const BASE = API_BASE_URL.replace('/api', '');
 
 export function getUploadUrl(filename: string): string {

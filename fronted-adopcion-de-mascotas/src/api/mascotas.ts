@@ -99,7 +99,7 @@ export async function deleteFotoMascota(fotoId: number) {
 }
 
 export function getFotoMascotaUrl(nombreArchivo: string) {
-  const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+  const baseUrl = import.meta.env.VITE_API_URL || 'https://cozy-happiness-production-77bb.up.railway.app/api';
   const base = baseUrl.replace('/api', '');
   const token = localStorage.getItem('token');
   return `${base}/uploads/${nombreArchivo}${token ? `?token=${encodeURIComponent(token)}` : ''}`;
