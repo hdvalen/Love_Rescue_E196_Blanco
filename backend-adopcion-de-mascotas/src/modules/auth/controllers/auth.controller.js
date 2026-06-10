@@ -186,6 +186,15 @@ const resetPassword = async (req, res) => {
 
 };
 
+const adminVerifyEmail = async (req, res) => {
+    try {
+        const result = await authService.verifyEmailAdmin(req.params.id);
+        return res.json({ ok: true, message: result.message });
+    } catch (error) {
+        return res.status(400).json({ ok: false, message: error.message });
+    }
+};
+
 module.exports = {
     register,
     login,
@@ -194,5 +203,6 @@ module.exports = {
     refresh,
     logout,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    adminVerifyEmail
 };

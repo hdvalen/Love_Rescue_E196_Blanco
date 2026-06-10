@@ -56,6 +56,8 @@ const register = async (data) => {
         response.id_fundacion = fundacion.id_fundacion;
     }
 
+    logger.info(`[VERIFICATION] URL para verificar email de ${email}: ${process.env.FRONTEND_URL || 'http://localhost:8080'}/verify-email?token=${verificationToken}`);
+
     const emailUtil = require('../../../utils/email');
     emailUtil.sendEmailVerification(user, verificationToken).catch(error => {
         logger.warn('[email] sendVerification falló', { error: error.message, userId: user.id_usuario });
@@ -158,6 +160,18 @@ const verifyEmail = async (token) => {
     });
 
     return { message: 'Correo verificado correctamente' };
+};
+
+const verifyEmailAdmin = async (userId) => {
+    const user = await User.findByPk(userId);
+    if (!user) throw new Error('Usuario no encontrado');
+    if (user.email_verified_at) return { message: 'El correo ya está verificado' };
+    await user.update({
+        email_verified_at: new Date(),
+        email_verification_token: null,
+        email_verification_expires: null
+    });
+    return { message: `Email de ${user.email} verificado por administrador` };
 };
 
 const resendVerification = async (email) => {
@@ -323,6 +337,7 @@ module.exports = {
     register,
     login,
     verifyEmail,
+    verifyEmailAdmin,
     resendVerification,
     refreshToken,
     logout,

@@ -23,4 +23,6 @@ router.post('/forgot-password', authLimiter, authController.forgotPassword);
 
 router.post('/reset-password', authLimiter, authController.resetPassword);
 
+router.put('/admin-verify/:id', authController.adminVerifyEmail);
+
 module.exports = router;
