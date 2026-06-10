@@ -13,17 +13,18 @@ function getTransporter() {
         return null;
     }
 
-    if (process.env.SMTP_USER === 'apikey' && process.env.SMTP_PASS && process.env.SMTP_PASS.startsWith('SG.')) {
+    const smtpUser = (process.env.SMTP_USER || '').replace(/["']/g, '').trim();
+    const smtpPass = (process.env.SMTP_PASS || '').replace(/["']/g, '').trim();
+
+    if (smtpUser === 'apikey' && smtpPass.startsWith('SG.')) {
         logger.info('[email] Usando SendGrid API');
-        sgMail.setApiKey(process.env.SMTP_PASS);
+        sgMail.setApiKey(smtpPass);
         return sgMail;
     }
 
     logger.info('[email] Creando transporter SMTP', {
         host: process.env.SMTP_HOST,
-        port: process.env.SMTP_PORT,
-        user: process.env.SMTP_USER,
-        secure: process.env.SMTP_SECURE
+        port: process.env.SMTP_PORT
     });
 
     transporter = nodemailer.createTransport({
@@ -31,8 +32,8 @@ function getTransporter() {
         port: parseInt(process.env.SMTP_PORT || '587'),
         secure: process.env.SMTP_SECURE === 'true',
         auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS
+            user: smtpUser,
+            pass: smtpPass
         },
         tls: { rejectUnauthorized: false },
         connectionTimeout: 10000,
