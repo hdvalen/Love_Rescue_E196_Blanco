@@ -200,4 +200,15 @@ async function sendEventEmail(userId, subject, bodyLines) {
     }
 }
 
-module.exports = { sendVerificationResult, sendWelcome, sendEmailVerification, sendPasswordReset, sendEventEmail };
+async function testSmtpConnection() {
+    const t = getTransporter();
+    if (!t) return { ok: false, error: 'SMTP_HOST no configurado' };
+    try {
+        await t.verify();
+        return { ok: true, message: 'Conexión SMTP exitosa' };
+    } catch (error) {
+        return { ok: false, error: error.message, code: error.code, command: error.command };
+    }
+}
+
+module.exports = { sendVerificationResult, sendWelcome, sendEmailVerification, sendPasswordReset, sendEventEmail, testSmtpConnection };

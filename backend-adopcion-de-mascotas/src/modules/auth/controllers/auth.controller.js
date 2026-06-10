@@ -195,6 +195,11 @@ const adminVerifyEmail = async (req, res) => {
     }
 };
 
+const testSmtp = async (req, res) => {
+    const result = await require('../../../utils/email').testSmtpConnection();
+    res.json(result);
+};
+
 module.exports = {
     register,
     login,
@@ -204,5 +209,6 @@ module.exports = {
     logout,
     forgotPassword,
     resetPassword,
-    adminVerifyEmail
+    adminVerifyEmail,
+    testSmtp
 };
