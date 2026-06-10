@@ -332,6 +332,13 @@ const acceptContract = async (idSolicitud, ip, usuarioId) => {
     if (!solicitud) throw new Error('Solicitud no encontrada');
     if (solicitud.estado_solicitud !== 'APROBADA') throw new Error('El contrato solo puede firmarse cuando la solicitud está aprobada');
 
+    if (!solicitud.Mascota) {
+      solicitud.Mascota = await Mascota.findByPk(solicitud.id_mascota, { transaction });
+    }
+    if (!solicitud.Fundacion) {
+      solicitud.Fundacion = await Fundacion.findByPk(solicitud.id_fundacion, { transaction });
+    }
+
     let evaluacion = await SolicitudEvaluacion.findOne({
       where: { id_solicitud: idSolicitud, estado: 1 },
       transaction
