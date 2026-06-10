@@ -9,7 +9,7 @@ import AdoptionModal from "@/components/AdoptionModal";
 import { DetailSkeleton } from "@/components/Skeletons";
 import { getUploadUrl } from "@/api/uploads";
 
-const API_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:3000/api').replace('/api', '');
+const API_BASE = (import.meta.env.VITE_API_URL || 'https://cozy-happiness-production-77bb.up.railway.app/api').replace('/api', '');
 
 const statusStyles: Record<string, string> = {
   Disponible: "bg-success text-success-foreground",

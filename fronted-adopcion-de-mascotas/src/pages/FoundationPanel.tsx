@@ -24,7 +24,7 @@ import { getUploadUrl } from "@/api/uploads";
 
 const SOLICITUDES_PER_PAGE = 8;
 
-const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000/api').replace('/api', '');
+const API_BASE_URL = (import.meta.env.VITE_API_URL || 'https://cozy-happiness-production-77bb.up.railway.app/api').replace('/api', '');
 
 const MAIN_STEPS = [
   { key: 'recibida', label: 'Recibida', icon: Home, desc: 'Revisar datos del adoptante' },

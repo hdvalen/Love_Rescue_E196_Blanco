@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import { getUploadUrl } from "@/api/uploads";
 import { uploadFotoUsuario } from "@/api/usuarios";
 
-const API_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:3000/api').replace('/api', '');
+const API_BASE = (import.meta.env.VITE_API_URL || 'https://cozy-happiness-production-77bb.up.railway.app/api').replace('/api', '');
 
 export default function Profile() {
   const { currentUser, updateProfile } = useApp();

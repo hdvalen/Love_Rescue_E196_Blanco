@@ -18,7 +18,7 @@ import { cancelarSolicitud, getHistorial } from "@/api/solicitudes";
 import type { HistorialEntry } from "@/api/solicitudes";
 import { getUploadUrl } from "@/api/uploads";
 
-const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000/api').replace('/api', '');
+const API_BASE_URL = (import.meta.env.VITE_API_URL || 'https://cozy-happiness-production-77bb.up.railway.app/api').replace('/api', '');
 
 const ADOPTER_STEPS = [
   { key: 'enviada', label: 'Enviada', icon: FileText, desc: 'Solicitud recibida' },
@@ -790,7 +790,7 @@ export default function MyRequests() {
                               variant="outline"
                               className="rounded-xl"
                               onClick={() => {
-                                const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+                                const baseUrl = import.meta.env.VITE_API_URL || 'https://cozy-happiness-production-77bb.up.railway.app/api';
                                 const token = localStorage.getItem('token');
                                 window.open(`${baseUrl}/solicitudes/${req.id}/contrato/descargar?token=${encodeURIComponent(token || '')}`, '_blank');
                               }}
@@ -986,7 +986,7 @@ export default function MyRequests() {
                         </div>
                         {req.contractAccepted && (
                           <Button size="sm" variant="outline" className="w-full rounded-xl" onClick={() => {
-                            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+                            const baseUrl = import.meta.env.VITE_API_URL || 'https://cozy-happiness-production-77bb.up.railway.app/api';
                             const token = localStorage.getItem('token');
                             window.open(`${baseUrl}/solicitudes/${req.id}/contrato/descargar?token=${encodeURIComponent(token || '')}`, '_blank');
                           }}>
@@ -1021,7 +1021,7 @@ export default function MyRequests() {
                         </div>
                         {req.contractAccepted && (
                           <Button size="sm" variant="outline" className="w-full rounded-xl" onClick={() => {
-                            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+                            const baseUrl = import.meta.env.VITE_API_URL || 'https://cozy-happiness-production-77bb.up.railway.app/api';
                             const token = localStorage.getItem('token');
                             window.open(`${baseUrl}/solicitudes/${req.id}/contrato/descargar?token=${encodeURIComponent(token || '')}`, '_blank');
                           }}>

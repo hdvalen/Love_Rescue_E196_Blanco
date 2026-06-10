@@ -8,7 +8,7 @@ import { PetCardSkeleton } from "@/components/Skeletons";
 import PaginationControls from "@/components/PaginationControls";
 import heroImg from "@/assets/hero-adoption.jpg";
 import { getReportePublico } from "@/api/reportes";
-import { getMascotas } from "@/api/mascotas";
+import { getMascotas, getFotoMascotaUrl } from "@/api/mascotas";
 import type { ReportePublico } from "@/api/reportes";
 import type { Pet } from "@/data/mockData";
 
@@ -66,7 +66,7 @@ export default function Index() {
             vaccinated: m.vacunado || false,
             sterilized: m.esterilizado || false,
             dewormed: false,
-            images: m.FotosMascota ? m.FotosMascota.map(d => `http://localhost:3000/uploads/${d.nombre_archivo}`) : [],
+            images: m.FotosMascota ? m.FotosMascota.map(d => getFotoMascotaUrl(d.nombre_archivo)) : [],
             foundationId: String(m.id_fundacion),
             adoptionConditions: m.condiciones_adopcion || '',
             status: (m.estado_mascota === 'DISPONIBLE' ? 'Disponible' : m.estado_mascota === 'EN_PROCESO' ? 'En Proceso' : 'Adoptado') as Pet['status'],
