@@ -40,17 +40,27 @@ const allowedOrigins = [
     process.env.FRONTEND_URL
 ].filter(Boolean);
 
+console.log('FRONTEND_URL =>', process.env.FRONTEND_URL);
+console.log('allowedOrigins =>', allowedOrigins);
+app.set('trust proxy', 1);
+
 app.use(cors({
     origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('No autorizado por CORS'));
+        console.log('ORIGIN RECIBIDO =>', origin);
+        // Permitir Postman, curl y peticiones sin origin
+        if (!origin) {
+            return callback(null, true);
         }
+        // Permitir dominios autorizados
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        console.log('ORIGIN BLOQUEADO =>', origin);
+        return callback(new Error(`No autorizado por CORS: ${origin}`));
     },
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
+    allowedHeaders: ['Content-Type','Authorization']
 }));
 
 const helmetDirectives = {
