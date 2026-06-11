@@ -9,6 +9,8 @@ const create = z.object({
     telefono: z.string().optional().default(''),
     sitio_web: z.string().optional().default(''),
     redes_sociales: z.string().optional().default(''),
+    mision: z.string().optional().default(''),
+    nit: z.string().optional().default(''),
 });
 
 const update = z.object({
@@ -20,6 +22,8 @@ const update = z.object({
     telefono: z.string().optional(),
     sitio_web: z.string().optional(),
     redes_sociales: z.string().optional(),
+    mision: z.string().optional(),
+    nit: z.string().optional(),
 });
 
 const aprobar = z.object({
