@@ -24,6 +24,7 @@ export default function AdminPanel() {
   const { foundations, verifyFoundation, refreshFoundations } = useApp();
   const [rejectModal, setRejectModal] = useState<{ id: string; name: string } | null>(null);
   const [rejectReason, setRejectReason] = useState("");
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const [reporte, setReporte] = useState<ReporteGeneral | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -154,27 +155,44 @@ onClick={exportToExcel} className="rounded-xl">
               {foundations.filter(f => f.verificationStatus === "Pendiente").map(f => {
                 const logoUrl = f.logoUrl ? getUploadUrl(f.logoUrl) : null;
                 const initials = f.name?.split(' ').map((s: string) => s[0]).filter(Boolean).slice(0, 2).join('').toUpperCase() || '?';
+                const isExpanded = expandedId === f.id;
                 return (
-                <div key={f.id} className="flex items-center gap-3 px-4 py-3 hover:bg-muted/30 transition-colors">
-                  {logoUrl ? (
-                    <img src={logoUrl} alt={f.name} className="h-9 w-9 rounded-lg object-cover border shrink-0" />
-                  ) : (
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 shrink-0">
-                      <span className="text-xs font-bold text-primary">{initials}</span>
+                <div key={f.id}>
+                  <div className="flex items-center gap-3 px-4 py-3 hover:bg-muted/30 transition-colors cursor-pointer" onClick={() => setExpandedId(isExpanded ? null : f.id)}>
+                    {logoUrl ? (
+                      <img src={logoUrl} alt={f.name} className="h-9 w-9 rounded-lg object-cover border shrink-0" />
+                    ) : (
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 shrink-0">
+                        <span className="text-xs font-bold text-primary">{initials}</span>
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">{f.name}</p>
+                      <p className="text-xs text-muted-foreground truncate">{f.email} · Registrada {f.createdAt ? new Date(f.createdAt).toLocaleDateString('es-CO') : '—'}</p>
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0" onClick={e => e.stopPropagation()}>
+                      <Button size="sm" onClick={() => handleApprove(f.id)} className="h-8 text-xs rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white">
+                        <CheckCircle className="mr-1 h-3.5 w-3.5" /> Aprobar
+                      </Button>
+                      <Button size="sm" variant="outline" className="h-8 text-xs rounded-lg text-red-600 border-red-200 hover:bg-red-50" onClick={() => setRejectModal({ id: f.id, name: f.name })}>
+                        <XCircle className="mr-1 h-3.5 w-3.5" /> Rechazar
+                      </Button>
+                    </div>
+                  </div>
+                  {isExpanded && (
+                    <div className="px-4 pb-4 pt-1 border-t mx-4">
+                      <div className="grid grid-cols-2 gap-3 text-sm bg-muted/30 rounded-lg p-4">
+                        <div><span className="font-medium">NIT:</span> {f.nit || '—'}</div>
+                        <div><span className="font-medium">Teléfono:</span> {f.phone || '—'}</div>
+                        <div><span className="font-medium">Ciudad:</span> {f.city || '—'}</div>
+                        <div><span className="font-medium">Departamento:</span> {f.department || '—'}</div>
+                        <div className="col-span-2"><span className="font-medium">Dirección:</span> {f.address || '—'}</div>
+                        {f.socialMedia && <div className="col-span-2"><span className="font-medium">Redes sociales:</span> {f.socialMedia}</div>}
+                        {f.mission && <div className="col-span-2"><span className="font-medium">Misión:</span> <p className="text-xs mt-1 text-muted-foreground">{f.mission}</p></div>}
+                        <div className="col-span-2"><span className="font-medium">Descripción:</span> <p className="text-xs mt-1 text-muted-foreground">{f.description || '—'}</p></div>
+                      </div>
                     </div>
                   )}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">{f.name}</p>
-                    <p className="text-xs text-muted-foreground truncate">{f.email} · Registrada {f.createdAt ? new Date(f.createdAt).toLocaleDateString('es-CO') : '—'}</p>
-                  </div>
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    <Button size="sm" onClick={() => handleApprove(f.id)} className="h-8 text-xs rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white">
-                      <CheckCircle className="mr-1 h-3.5 w-3.5" /> Aprobar
-                    </Button>
-                    <Button size="sm" variant="outline" className="h-8 text-xs rounded-lg text-red-600 border-red-200 hover:bg-red-50" onClick={() => setRejectModal({ id: f.id, name: f.name })}>
-                      <XCircle className="mr-1 h-3.5 w-3.5" /> Rechazar
-                    </Button>
-                  </div>
                 </div>
                 );
               })}
